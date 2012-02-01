@@ -38,7 +38,7 @@ function Menu(caller, options){
 	this.menuOpen = false;
 	this.menuExists = false;
 	
-	var options = jQuery.extend({
+	var options = jQuery.extend(true,{
 		content: null,
 		width: 180, // width of menu container, must be set or passed in to calculate widths of child menus
 		maxHeight: 180, // max height of menu (if a drilldown: height does not include breadcrumb)
@@ -74,6 +74,12 @@ function Menu(caller, options){
 		$.each(allUIMenus, function(i){
 			if (allUIMenus[i].menuOpen) { allUIMenus[i].kill(); };	
 		});
+	};
+	
+	
+	var checkMenuHeight = function(el){
+		if (el.height() > options.maxHeight) { el.addClass('fg-menu-scroll') };	
+		el.css({ height: options.maxHeight });
 	};
 	
 	this.kill = function(){
@@ -235,7 +241,9 @@ function Menu(caller, options){
 				},
 				function(){ $(this).removeClass(options.linkHoverSecondary); }
 			);
-		};	
+		};
+
+        	checkMenuHeight( container );	
 		
 		menu.setPosition(container, caller, options);
 		menu.menuExists = true;
